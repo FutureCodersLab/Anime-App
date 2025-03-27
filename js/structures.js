@@ -20,7 +20,7 @@ export const getAnimeCardStructure = (anime) => `
 export const getAnimeDetailsStructure = (anime) => {
     const genreNames = anime.genres?.map((genre) => genre.name).join(", ");
     return `
-      <div class="detail-banner">
+      <div class="details-banner">
         <img src="${anime.images?.jpg?.large_image_url}" alt="${anime.title}"/>
         <button class="back-button">← Back</button>
       </div>
