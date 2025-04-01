@@ -16,26 +16,3 @@ export const getAnimeCardStructure = (anime) => {
     </div>
 `;
 };
-
-export const getAnimeDetailsStructure = (anime) => {
-    const { images, title, score, synopsis } = anime;
-    const genres = anime.genres?.map(({ name }) => name).join(", ");
-
-    return `
-      <div class="image-container">
-        <img src="${images?.jpg?.large_image_url}"/>
-        <button class="back">← Back</button>
-      </div>
-      <div class="content">
-        <div class="header">
-          <h2>${title}</h2>
-          <img class="like" src="./icons/heart-outline.svg" />
-        </div>
-        <div class="info">
-          <span>Rating: ${score}</span>
-          <span>Genres: ${genres}</span>
-        </div>
-        <p>${synopsis}</p>
-      </div>
-  `;
-};
