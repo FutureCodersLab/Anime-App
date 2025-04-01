@@ -1,4 +1,4 @@
-import { fetchAnimeList, fetchAnimeDetails } from "./animeService.js";
+import { getSearchResult, getTrendingAnimes } from "./api.js";
 import { toggleFavorite, getFavorites, updateLikeButton } from "./favorites.js";
 import { getAnimeCardStructure } from "./structures.js";
 
@@ -8,6 +8,24 @@ const input = document.querySelector("input");
 const homeButton = document.querySelector("#home");
 const favoritesButton = document.querySelector("#favorites");
 
+document.addEventListener("DOMContentLoaded", () => {
+    loadTrendingAnimes();
+    form.addEventListener("submit", submit);
+    homeButton.addEventListener("click", loadTrendingAnimes);
+    favoritesButton.addEventListener("click", loadFavorites);
+});
+
+const submit = (e) => {
+    e.preventDefault();
+    const inputValue = input.value.trim();
+    searchAnime(inputValue);
+};
+
+const loadTrendingAnimes = async () => {
+    const animeList = await getTrendingAnimes();
+    displayAnimeList(animeList);
+};
+
 const displayAnimeList = (animeList) => {
     animeContainer.innerHTML = "";
     animeList.forEach((anime) => {
@@ -15,50 +33,34 @@ const displayAnimeList = (animeList) => {
         div.innerHTML = getAnimeCardStructure(anime);
         animeContainer.appendChild(div);
 
-        const details = div.querySelector(".overlay");
-        details.addEventListener("click", () => {
+        const overlayDiv = div.querySelector(".overlay");
+        overlayDiv.addEventListener("click", () => {
             window.location.href = `details.html?id=${anime.mal_id}`;
         });
 
-        const likeButton = div.querySelector(".like-button");
-        updateLikeButton(anime.mal_id, likeButton);
+        const likeButton = div.querySelector(".like");
+        updateLikeButton(anime, likeButton);
         likeButton.addEventListener("click", (e) => {
             e.stopPropagation();
-            toggleFavorite(anime.mal_id, likeButton);
+            toggleFavorite(anime, likeButton);
         });
     });
-};
-
-const loadTrendingAnime = async () => {
-    const animeList = await fetchAnimeList("top/anime");
-    displayAnimeList(animeList);
 };
 
 const searchAnime = async (query) => {
     if (!query) return;
-    const animeList = await fetchAnimeList(
-        `anime?q=${encodeURIComponent(query)}`
-    );
+    const animeList = await getSearchResult(query);
     displayAnimeList(animeList);
-    input.value = "";
+    form.reset();
 };
 
 const loadFavorites = async () => {
-    const favs = getFavorites();
-    if (!favs.length) {
+    const favoritesList = getFavorites();
+
+    if (!favoritesList.length) {
         animeContainer.innerHTML = "<p>No favorites yet!</p>";
         return;
     }
-    const animeList = await Promise.all(favs.map(fetchAnimeDetails));
-    displayAnimeList(animeList.filter(Boolean));
-};
 
-document.addEventListener("DOMContentLoaded", () => {
-    loadTrendingAnime();
-    form.addEventListener("submit", (e) => {
-        e.preventDefault();
-        searchAnime(input.value.trim());
-    });
-    homeButton.addEventListener("click", loadTrendingAnime);
-    favoritesButton.addEventListener("click", loadFavorites);
-});
+    displayAnimeList(favoritesList);
+};

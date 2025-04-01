@@ -1,35 +1,32 @@
-import { fetchAnimeDetails } from "./animeService.js";
+import { getAnimeDetails } from "./api.js";
 import { toggleFavorite, updateLikeButton } from "./favorites.js";
 import { getAnimeDetailsStructure } from "./structures.js";
 
-const detailContainer = document.getElementById("details-container");
+const detailsContainer = document.getElementById("details-container");
 const animeId = new URLSearchParams(window.location.search).get("id");
 
-const loadAnimeDetail = async () => {
+document.addEventListener("DOMContentLoaded", async () => {
     if (!animeId) {
-        detailContainer.innerHTML = `<p class="error-message">No anime ID provided.</p>`;
+        detailsContainer.innerHTML = `<p class="error-message">No anime ID provided.</p>`;
         return;
     }
 
-    const anime = await fetchAnimeDetails(animeId);
-    console.log(anime);
+    const anime = await getAnimeDetails(animeId);
     if (!anime) {
-        detailContainer.innerHTML = `<p class="error-message">Failed to load anime details.</p>`;
+        detailsContainer.innerHTML = `<p class="error-message">Failed to load anime details.</p>`;
         return;
     }
 
-    detailContainer.innerHTML = getAnimeDetailsStructure(anime);
+    detailsContainer.innerHTML = getAnimeDetailsStructure(anime);
 
-    const backButton = document.querySelector(".back-button");
+    const backButton = document.querySelector(".back");
     backButton.addEventListener("click", () => {
         window.history.back();
     });
 
-    const likeButton = document.querySelector(".like-button");
-    updateLikeButton(animeId, likeButton);
+    const likeButton = document.querySelector(".like");
+    updateLikeButton(anime, likeButton);
     likeButton.addEventListener("click", () => {
-        toggleFavorite(animeId, likeButton);
+        toggleFavorite(anime, likeButton);
     });
-};
-
-loadAnimeDetail();
+});

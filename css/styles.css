@@ -9,6 +9,7 @@ body {
     background-color: #f9f9f9;
     color: #333;
     padding-top: 80px;
+    min-height: 100vh;
 }
 
 header {
@@ -75,10 +76,46 @@ h2 {
 }
 
 #anime-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    align-items: center;
     gap: 30px;
     padding: 40px;
+}
+
+.loading-spinner {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    font-size: 16px;
+    color: #333;
+}
+
+.loading-spinner::before {
+    content: "";
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    border: 4px solid rgba(0, 0, 0, 0.3);
+    border-radius: 50%;
+    border-top: 4px solid #3e5879;
+    margin-bottom: 10px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
 }
 
 .card {
@@ -94,7 +131,7 @@ h2 {
     transition: 0.2s ease all;
 }
 
-.card .poster {
+.card img {
     width: 100%;
     height: 260px;
     object-fit: cover;
@@ -105,7 +142,7 @@ h2 {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-.card .title {
+.card h4 {
     font-weight: 600;
     display: -webkit-box;
     -webkit-line-clamp: 2;
@@ -140,16 +177,12 @@ h2 {
     gap: 5px;
 }
 
-.details .details-title {
-    font-size: 16px;
-}
-
 .details span {
     font-size: 12px;
     opacity: 0.8;
 }
 
-.details .description {
+.details p {
     font-size: 0.9rem;
     line-height: 1.4;
     display: -webkit-box;
@@ -159,26 +192,16 @@ h2 {
     text-overflow: ellipsis;
 }
 
-.like-button {
+.overlay .like {
     width: 24px;
     height: 24px;
     position: absolute;
     bottom: 20px;
     right: 20px;
-    background: transparent;
-    border: none;
     cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.heart-icon {
-    width: 24px;
-    height: 24px;
     transition: transform 0.2s ease;
 }
 
-.like-button:hover .heart-icon {
+.overlay .like:hover {
     transform: scale(1.1);
 }

@@ -1,29 +1,30 @@
 export const getFavorites = () =>
-    JSON.parse(localStorage.getItem("animeFavorites")) || [];
+    JSON.parse(localStorage.getItem("anime-favorites")) || [];
 
 export const saveFavorites = (favorites) => {
-    localStorage.setItem("animeFavorites", JSON.stringify(favorites));
+    localStorage.setItem("anime-favorites", JSON.stringify(favorites));
 };
 
-export const toggleFavorite = (animeId, likeButton) => {
-    const id = String(animeId);
+export const toggleFavorite = async (anime, likeButton) => {
     let favorites = getFavorites();
-    const isFavorite = favorites.includes(id);
+
+    const isFavorite = favorites.some(({ mal_id }) => mal_id === anime.mal_id);
 
     if (isFavorite) {
-        favorites = favorites.filter((favId) => favId !== id);
+        favorites = favorites.filter(({ mal_id }) => mal_id !== anime.mal_id);
     } else {
-        favorites.push(id);
+        favorites.push(anime);
     }
+
     saveFavorites(favorites);
-    updateLikeButton(id, likeButton);
+    updateLikeButton(anime, likeButton);
 };
 
-export const updateLikeButton = (animeId, likeButton) => {
+export const updateLikeButton = (anime, likeButton) => {
     if (!likeButton) return;
-    const id = String(animeId);
     const favorites = getFavorites();
-    likeButton.innerHTML = favorites.includes(id)
-        ? `<img src="./icons/red-heart.svg" class="heart-icon" />`
-        : `<img src="./icons/heart.svg" class="heart-icon" />`;
+    const heart = favorites.some(({ mal_id }) => mal_id === anime.mal_id)
+        ? "heart-full"
+        : "heart-outline";
+    likeButton.src = `./icons/${heart}.svg`;
 };

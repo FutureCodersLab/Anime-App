@@ -1,41 +1,41 @@
-export const getAnimeCardStructure = (anime) => `
+export const getAnimeCardStructure = (anime) => {
+    const { images, title, score, episodes, synopsis, mal_id } = anime;
+    return `
     <div class="card">
-      <img class="poster" src="${anime.images?.jpg?.image_url}"/>
-      <p class="title">${anime.title}</p>
+      <img src="${images?.jpg?.image_url}"/>
+      <h4>${title}</h4>
       <div class="overlay">
         <div class="details">
-          <h4 class="details-title">${anime.title}</h4>
-          <span class="anime-rating">Rating: ${anime.score}⭐</span>
-          <span class="episodes">Episodes: ${anime.episodes}</span>
-          <p class="description">${anime.synopsis}</p>
+          <h4>${title}</h4>
+          <span>Rating: ${score}⭐</span>
+          <span>Episodes: ${episodes}</span>
+          <p>${synopsis}</p>
         </div>
-        <button class="like-button" data-id="${anime.mal_id}">
-          <label>Like</label>
-          <img src="./icons/heart.svg" class="heart-icon" />
-        </button>
+          <img class="like" src="./icons/heart-outline.svg" data-id="${mal_id}" />
       </div>
     </div>
 `;
+};
 
 export const getAnimeDetailsStructure = (anime) => {
-    const genreNames = anime.genres?.map((genre) => genre.name).join(", ");
+    const { images, title, score, synopsis } = anime;
+    const genres = anime.genres?.map(({ name }) => name).join(", ");
+
     return `
-      <div class="details-banner">
-        <img src="${anime.images?.jpg?.large_image_url}" alt="${anime.title}"/>
-        <button class="back-button">← Back</button>
+      <div class="image-container">
+        <img src="${images?.jpg?.large_image_url}"/>
+        <button class="back">← Back</button>
       </div>
       <div class="content">
-        <div class="title-like">
-          <h2 class="title">${anime.title}</h2>
-          <button class="like-button" data-id="${anime.mal_id}">
-            <img src="./icons/heart.svg" class="heart-icon" />
-          </button>
+        <div class="header">
+          <h2>${title}</h2>
+          <img class="like" src="./icons/heart-outline.svg" />
         </div>
         <div class="info">
-          <span class="rating">Rating: ${anime.score}</span>
-          <span class="genres">Genres: ${genreNames}</span>
+          <span>Rating: ${score}</span>
+          <span>Genres: ${genres}</span>
         </div>
-        <p class="description">${anime.synopsis}</p>
+        <p>${synopsis}</p>
       </div>
   `;
 };
