@@ -30,6 +30,7 @@ const displayAnimeList = (animeList) => {
     animeContainer.innerHTML = "";
     animeList.forEach((anime) => {
         const div = document.createElement("div");
+        div.className = "card";
         div.innerHTML = getAnimeCardStructure(anime);
         animeContainer.appendChild(div);
 
