@@ -3,6 +3,7 @@ import { toggleFavorite, getFavorites, updateLikeButton } from "./favorites.js";
 import { getAnimeCardStructure } from "./structures.js";
 
 const animeContainer = document.querySelector("#anime-container");
+const loadingSpinner = document.querySelector(".loading-spinner");
 const form = document.querySelector("form");
 const input = document.querySelector("input");
 const homeButton = document.querySelector("#home");
@@ -22,11 +23,13 @@ const submit = (e) => {
 };
 
 const loadTrendingAnimes = async () => {
+    loadingSpinner.style.display = "flex";
     const animeList = await getTrendingAnimes();
     displayAnimeList(animeList);
 };
 
 const displayAnimeList = (animeList) => {
+    loadingSpinner.style.display = "none";
     animeContainer.innerHTML = "";
     animeList.forEach((anime) => {
         const div = document.createElement("div");
@@ -49,6 +52,7 @@ const displayAnimeList = (animeList) => {
 };
 
 const searchAnime = async (query) => {
+    loadingSpinner.style.display = "flex";
     if (!query) return;
     const animeList = await getSearchResult(query);
     displayAnimeList(animeList);
