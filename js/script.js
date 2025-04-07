@@ -23,6 +23,7 @@ const submit = (e) => {
 };
 
 const loadTrendingAnimes = async () => {
+    animeContainer.innerHTML = "";
     loadingSpinner.style.display = "flex";
     const animeList = await getTrendingAnimes();
     displayAnimeList(animeList);
@@ -30,7 +31,6 @@ const loadTrendingAnimes = async () => {
 
 const displayAnimeList = (animeList) => {
     loadingSpinner.style.display = "none";
-    animeContainer.innerHTML = "";
     animeList.forEach((anime) => {
         const div = document.createElement("div");
         div.className = "card";
